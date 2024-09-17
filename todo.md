@@ -1,0 +1,7 @@
+- create goals
+- list goals
+  - completed goals
+  - pending goals
+- mark/unmark goals as completed
+- remove goals
+- message system
