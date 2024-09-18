@@ -45,6 +45,22 @@ const listGoal = async () => {
   console.log("Goal(s) marked as completed")
 }
 
+const completedGoals = async () => {
+  const completed = goals.filter((goal) => {
+    return goal.checked
+  })
+
+  if(completed.length == 0) {
+    console.log("There are no completed goals!:(")
+    return
+  }
+
+  await select({
+    message: 'Completed goals',
+    choices: [...completed]
+  })
+}
+
 const start = async () => {
 
   while(true) {
@@ -61,6 +77,10 @@ const start = async () => {
           value: 'list'
         },
         {
+          name: 'Completed goals',
+          value: 'completed'
+        },
+        {
           name: "Go back",
           value: 'go back'
         }
@@ -74,6 +94,9 @@ const start = async () => {
         break
       case 'list':
         await listGoal()
+        break
+      case 'completed':
+        await completedGoals()
         break
       case 'go back':
         console.log("See you soon")
