@@ -5,12 +5,12 @@ let goal = {
   checked: false,
 }
 
-let goals = [ goal ]
+let goals = [goal]
 
 const createGoal = async () => {
   const goal = await input({ message: "Type the goal:" })
 
-  if(goal.length == 0) {
+  if (goal.length == 0) {
     console.log("The goal field cannot be empty.")
     return
   }
@@ -29,10 +29,10 @@ const listGoal = async () => {
     m.checked = false
   })
 
-  if(answers.length == 0) {
+  if (answers.length == 0) {
     console.log("No goal selected!")
     return
-  }  
+  }
 
   answers.forEach((answer) => {
     const goal = goals.find((m) => {
@@ -50,13 +50,13 @@ const completedGoals = async () => {
     return goal.checked
   })
 
-  if(completed.length == 0) {
+  if (completed.length == 0) {
     console.log("There are no completed goals! :(")
     return
   }
 
   await select({
-    message: 'Completed goals ' + completed.length,
+    message: 'Completed goals: ' + completed.length,
     choices: [...completed]
   })
 }
@@ -66,20 +66,45 @@ const pendingGoals = async () => {
     return goal.checked != true
   })
 
-  if(pending.length == 0) {
+  if (pending.length == 0) {
     console.log("There are no pending goals! :)")
     return
   }
 
   await select({
-    message: 'Pending goals ' + pending.length,
+    message: 'Pending goals: ' + pending.length,
     choices: [...pending]
   })
 }
 
+const deleteGoals = async () => {
+  const unmarkedGoals = goals.map((goal) => {
+    return { value: goal.value, checked: false }
+  })
+
+  const itemsToDelete = await checkbox({
+    message: "Select item to delete.",
+    choices: [...unmarkedGoals],
+    instructions: false,
+  })
+
+  if (itemsToDelete.length == 0) {
+    console.log("There are no items to delete.")
+    return
+  }
+
+  itemsToDelete.forEach((item) => {
+    goals = goals.filter((goal) => {
+      return goal.value != item
+    })
+  })
+
+  console.log('Goal(s) successfully deleted!')
+}
+
 const start = async () => {
 
-  while(true) {
+  while (true) {
 
     const option = await select({
       message: 'Menu >',
@@ -101,13 +126,17 @@ const start = async () => {
           value: 'pending'
         },
         {
+          name: 'Delete goals',
+          value: 'delete'
+        },
+        {
           name: "Go back",
           value: 'go back'
         }
-      ]        
+      ]
     })
 
-    switch(option) {
+    switch (option) {
       case 'add':
         await createGoal()
         console.log(goals)
@@ -120,6 +149,9 @@ const start = async () => {
         break
       case 'pending':
         await pendingGoals()
+        break
+      case 'delete':
+        await deleteGoals()
         break
       case 'go back':
         console.log("See you soon")
