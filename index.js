@@ -1,4 +1,22 @@
-const { select } = require('@inquirer/prompts')
+const { select, input } = require('@inquirer/prompts')
+
+let goal = {
+  value: "Drink 3 liters of water per day",
+  checked: false,
+}
+
+let goals = [ goal ]
+
+const createGoal = async () => {
+  const goal = await input({ message: "Type the goal:" })
+
+  if(goal.length == 0) {
+    console.log("The goal field cannot be empty.")
+    return
+  }
+
+  goals.push({ value: goal, checked: false })
+}
 
 const start = async () => {
 
@@ -24,7 +42,8 @@ const start = async () => {
 
     switch(option) {
       case 'add':
-        console.log("Let's add")
+        await createGoal()
+        console.log(goals)
         break
       case 'list':
         console.log("Let's list")
