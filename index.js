@@ -1,12 +1,23 @@
 const { select, input, checkbox } = require('@inquirer/prompts')
+const fs = require("fs").promises
 
 let message = "Welcome to Goal Manager CLI!"
-let goal = {
-  value: "Drink 3 liters of water per day",
-  checked: false,
+
+let goals
+
+const loadGoals = async () => {
+  try {
+    const data = await fs.readFile("goals.json", 'utf-8')
+    goals = JSON.parse(data)
+  }
+  catch (error) {
+    goals = []
+  }
 }
 
-let goals = [goal]
+const saveGoals = async () => {
+  await fs.writeFile("goals.json", JSON.stringify(goals, null, 2))
+}
 
 const createGoal = async () => {
   const goal = await input({ message: "Type the goal:" })
@@ -22,6 +33,11 @@ const createGoal = async () => {
 }
 
 const listGoal = async () => {
+  if(goals.length == 0) {
+    message =  "There are no goals!"
+    return
+  }
+
   const answers = await checkbox({
     message: "Use the arrows to switch between goals, the spacebar to mark or unmark, and Enter to complete this step.",
     choices: [...goals],
@@ -49,6 +65,11 @@ const listGoal = async () => {
 }
 
 const completedGoals = async () => {
+  if(goals.length == 0) {
+    message =  "There are no goals!"
+    return
+  }
+
   const completed = goals.filter((goal) => {
     return goal.checked
   })
@@ -65,6 +86,11 @@ const completedGoals = async () => {
 }
 
 const pendingGoals = async () => {
+  if(goals.length == 0) {
+    message =  "There are no goals!"
+    return
+  }
+
   const pending = goals.filter((goal) => {
     return goal.checked != true
   })
@@ -81,6 +107,11 @@ const pendingGoals = async () => {
 }
 
 const deleteGoals = async () => {
+  if(goals.length == 0) {
+    message =  "There are no goals!"
+    return
+  }
+  
   const unmarkedGoals = goals.map((goal) => {
     return { value: goal.value, checked: false }
   })
@@ -116,9 +147,11 @@ const showMessage = () => {
 }
 
 const start = async () => {
+  await loadGoals()
 
   while (true) {
     showMessage()
+    await saveGoals()
 
     const option = await select({
       message: 'Menu >',

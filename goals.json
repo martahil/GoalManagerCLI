@@ -1,0 +1,18 @@
+[
+  {
+    "value": "Drink 3 liters of water per day",
+    "checked": true
+  },
+  {
+    "value": "Walk 20 minutes per day",
+    "checked": true
+  },
+  {
+    "value": "Meditate 20 minutes per day",
+    "checked": false
+  },
+  {
+    "value": "Read for 15 minutes",
+    "checked": false
+  }
+]
