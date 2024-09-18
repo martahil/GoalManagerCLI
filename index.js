@@ -51,13 +51,29 @@ const completedGoals = async () => {
   })
 
   if(completed.length == 0) {
-    console.log("There are no completed goals!:(")
+    console.log("There are no completed goals! :(")
     return
   }
 
   await select({
-    message: 'Completed goals',
+    message: 'Completed goals ' + completed.length,
     choices: [...completed]
+  })
+}
+
+const pendingGoals = async () => {
+  const pending = goals.filter((goal) => {
+    return goal.checked != true
+  })
+
+  if(pending.length == 0) {
+    console.log("There are no pending goals! :)")
+    return
+  }
+
+  await select({
+    message: 'Pending goals ' + pending.length,
+    choices: [...pending]
   })
 }
 
@@ -81,6 +97,10 @@ const start = async () => {
           value: 'completed'
         },
         {
+          name: 'Pending goals',
+          value: 'pending'
+        },
+        {
           name: "Go back",
           value: 'go back'
         }
@@ -97,6 +117,9 @@ const start = async () => {
         break
       case 'completed':
         await completedGoals()
+        break
+      case 'pending':
+        await pendingGoals()
         break
       case 'go back':
         console.log("See you soon")
