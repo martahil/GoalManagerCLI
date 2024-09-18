@@ -1,5 +1,6 @@
 const { select, input, checkbox } = require('@inquirer/prompts')
 
+let message = "Welcome to Goal Manager CLI!"
 let goal = {
   value: "Drink 3 liters of water per day",
   checked: false,
@@ -11,11 +12,13 @@ const createGoal = async () => {
   const goal = await input({ message: "Type the goal:" })
 
   if (goal.length == 0) {
-    console.log("The goal field cannot be empty.")
+    message = "The goal field cannot be empty."
     return
   }
 
   goals.push({ value: goal, checked: false })
+
+  message = 'Goal(s) successfully created!'
 }
 
 const listGoal = async () => {
@@ -30,7 +33,7 @@ const listGoal = async () => {
   })
 
   if (answers.length == 0) {
-    console.log("No goal selected!")
+    message = "No goal selected!"
     return
   }
 
@@ -42,7 +45,7 @@ const listGoal = async () => {
     goal.checked = true
   })
 
-  console.log("Goal(s) marked as completed")
+  message = "Goal(s) marked as completed"
 }
 
 const completedGoals = async () => {
@@ -51,7 +54,7 @@ const completedGoals = async () => {
   })
 
   if (completed.length == 0) {
-    console.log("There are no completed goals! :(")
+    message = "There are no completed goals! :("
     return
   }
 
@@ -67,7 +70,7 @@ const pendingGoals = async () => {
   })
 
   if (pending.length == 0) {
-    console.log("There are no pending goals! :)")
+    message = "There are no pending goals! :)"
     return
   }
 
@@ -89,7 +92,7 @@ const deleteGoals = async () => {
   })
 
   if (itemsToDelete.length == 0) {
-    console.log("There are no items to delete.")
+    message = "There are no items to delete."
     return
   }
 
@@ -99,12 +102,23 @@ const deleteGoals = async () => {
     })
   })
 
-  console.log('Goal(s) successfully deleted!')
+  message = 'Goal(s) successfully deleted!'
+}
+
+const showMessage = () => {
+  console.clear()
+
+  if (message != '') {
+    console.log(message)
+    console.log('')
+    message = ''
+  }
 }
 
 const start = async () => {
 
   while (true) {
+    showMessage()
 
     const option = await select({
       message: 'Menu >',
@@ -139,7 +153,6 @@ const start = async () => {
     switch (option) {
       case 'add':
         await createGoal()
-        console.log(goals)
         break
       case 'list':
         await listGoal()
