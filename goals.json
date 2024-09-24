@@ -4,15 +4,15 @@
     "checked": true
   },
   {
-    "value": "Walk 20 minutes per day",
-    "checked": true
-  },
-  {
     "value": "Meditate 20 minutes per day",
     "checked": false
   },
   {
     "value": "Read for 15 minutes",
+    "checked": false
+  },
+  {
+    "value": "Going for a 30-minute walk every day.",
     "checked": false
   }
 ]
